@@ -18,6 +18,11 @@ $messageList = [
         'auteur' => 'Sébastien',
         'texte' => 'On va faire un peu de PHP',
         'date_message' => '10/10/2020'
+    ],
+    [
+        'auteur' => 'Maev',
+        'texte' => 'A la soupe',
+        'date_message' => '10/10/2020'
     ]
 ];
 
@@ -57,8 +62,8 @@ $messageList = [
     <div class="row justify-content-center">
         <div class="col-8 message-panel">
             <!-- Le titre de l'application -->
-            <h1>Ma super messagerie</h1>
-            <h3></h3>
+            <h1><?php echo $appTitle ?></h1>
+            <h3><?php echo $appPitch ?></h3>
 
 
 
@@ -82,12 +87,12 @@ $messageList = [
 
             <!-- La liste des messages -->
             <h2>Les messages</h2>
-
-            <div class="message">
-                <p>Le 10/10/2020 Ufuk a dit :</p>
-                <div>Bonjour à tous</div>
-            </div>
-
+            <?php foreach ($messageList as $message) : ?>
+                <div class="message">
+                    <p>Le <?php echo $message["date_message"] ?> <?php echo $message["auteur"] ?> a dit :</p>
+                    <div><?php echo $message["texte"] ?></div>
+                </div>
+            <?php endforeach ?>
         </div><!-- fermeture de message-panel -->
     </div><!-- fermeture de la ligne Bootstrap -->
 </body>
