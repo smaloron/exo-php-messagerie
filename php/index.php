@@ -7,31 +7,19 @@ $appPitch = "Vous gardez toujours le contact avec vos amis";
 $pdo = new PDO(
     "mysql:host=127.0.0.1;dbname=formation;charset=utf8",
     "root",
-    ""
+    "",
+    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
 );
 
-$messageList = [
-    [
-        'auteur' => 'Ufuk',
-        'texte' => 'Bonjour à tous',
-        'date_message' => '10/10/2020'
-    ],
-    [
-        'auteur' => 'Nazaré',
-        'texte' => 'Bonjour merci Ufuk',
-        'date_message' => '10/10/2020'
-    ],
-    [
-        'auteur' => 'Sébastien',
-        'texte' => 'On va faire un peu de PHP',
-        'date_message' => '10/10/2020'
-    ],
-    [
-        'auteur' => 'Maev',
-        'texte' => 'A la soupe',
-        'date_message' => '10/10/2020'
-    ]
-];
+try {
+    // Interrogation de la base de données
+    $queryResult = $pdo->query("SELECT * FROM messages");
+    // récupération des résultats de la requête
+    $messageList = $queryResult->fetchAll(PDO::FETCH_ASSOC);
+} catch(PDOException $e){
+    echo $e->getMessage();
+}
+
 
 ?>
 <!DOCTYPE html>
