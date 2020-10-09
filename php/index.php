@@ -20,6 +20,31 @@ try {
     echo $e->getMessage();
 }
 
+// Traitement du formulaire
+
+// Définir une variable indiquant que les données ont été postées
+$isPosted = count($_POST) > 0;
+
+// tester la valeur de $isPosted
+if ($isPosted) {
+    // Récupérer et nettoyer les données
+    $auteur = filter_input(INPUT_POST, "saisieAuteur", FILTER_SANITIZE_STRING);
+    $message = filter_input(INPUT_POST, "message", FILTER_SANITIZE_STRING);
+
+    // Définir la requête SQL
+    $sql = "INSERT INTO messages (auteur, texte, date_message) VALUES (?,?,?)";
+
+    // Définir une requête préparée
+    $statement = $pdo->prepare($sql);
+
+    // Exécuter la requête préparée
+    $statement->execute([
+        $auteur, $message, date("Y-m-d H:i:s")
+    ]);
+
+    // Rediriger vers la page
+    header("location:php/index.php");
+}
 
 ?>
 <!DOCTYPE html>
@@ -64,11 +89,11 @@ try {
 
             <!-- Le formulaire de création de message -->
             <div class="mt-5 mb-5">
-                <form>
+                <form method="post" action="/php/index.php">
                     <h2>Nouveau message</h2>
                     <div class="form-group">
                         <label>Auteur</label>
-                        <input type="text" name="auteur" class="form-control">
+                        <input type="text" name="saisieAuteur" class="form-control">
                     </div>
                     <div class="form-group">
                         <label>Message</label>
