@@ -37,11 +37,32 @@ CREATE TABLE livres(
     titre VARCHAR(80) NOT NULL,
     annee_publication YEAR NOT NULL,
     prix SMALLINT UNSIGNED NOT NULL,
-    PRIMARY KEY (id)
+    id_genre SMALLINT UNSIGNED NOT NULL,
+    id_editeur SMALLINT UNSIGNED NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT contrainte_livre_genre
+        FOREIGN KEY (id_genre)
+        REFERENCES genres(id),
+    CONSTRAINT contrainte_livre_editeur 
+        FOREIGN KEY (id_editeur) 
+        REFERENCES editeurs(id)
 );
 
-INSERT INTO livres (titre, annee_publication, prix)
+INSERT INTO livres (titre, annee_publication, prix, id_genre, id_editeur)
 VALUES 
-('Les Misérables', '1985', 1500),
-('SQL for smarties', '2005', 5700),
-('Les dernières Trumperies sur le climat', '2020', 1200);
+('Les Misérables', '1985', 1500, 2, 1),
+('SQL for smarties', '2005', 5700, 1, 2),
+('Les dernières Trumperies sur le climat', '2020', 1200, 3, 2);
+
+DROP TABLE IF EXISTS livres_auteurs(
+    id_livre SMALLINT UNSIGNED,
+    id_auteur SMALLINT UNSIGNED,
+    PRIMARY KEY (id_livre, id_auteur),
+    CONSTRAINT contrainte_livres_auteurs_livre 
+        FOREIGN KEY (id_livre) REFERENCES livres(id)
+    CONSTRAINT contrainte_livres_auteurs_auteur 
+    FOREIGN KEY (id_auteur) REFERENCES auteurs(id)
+);
+
+INSERT INTO livres_auteurs (id_livre, id_auteur)
+VALUES (1, 1), (1, 2), (2, 3), (3, 3), (3, 1);
