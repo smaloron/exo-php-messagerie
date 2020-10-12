@@ -54,14 +54,17 @@ VALUES
 ('SQL for smarties', '2005', 5700, 1, 2),
 ('Les dernières Trumperies sur le climat', '2020', 1200, 3, 2);
 
-DROP TABLE IF EXISTS livres_auteurs(
+
+DROP TABLE IF EXISTS livres_auteurs;
+
+CREATE TABLE livres_auteurs(
     id_livre SMALLINT UNSIGNED,
     id_auteur SMALLINT UNSIGNED,
     PRIMARY KEY (id_livre, id_auteur),
     CONSTRAINT contrainte_livres_auteurs_livre 
-        FOREIGN KEY (id_livre) REFERENCES livres(id)
+        FOREIGN KEY (id_livre) REFERENCES livres(id),
     CONSTRAINT contrainte_livres_auteurs_auteur 
-    FOREIGN KEY (id_auteur) REFERENCES auteurs(id)
+        FOREIGN KEY (id_auteur) REFERENCES auteurs(id)
 );
 
 INSERT INTO livres_auteurs (id_livre, id_auteur)
