@@ -1,5 +1,7 @@
 USE formation;
 
+SET foreign_key_checks = 0;
+
 DROP TABLE IF EXISTS auteurs;
 CREATE TABLE auteurs(
     id SMALLINT UNSIGNED AUTO_INCREMENT,
@@ -69,3 +71,6 @@ CREATE TABLE livres_auteurs(
 
 INSERT INTO livres_auteurs (id_livre, id_auteur)
 VALUES (1, 1), (1, 2), (2, 3), (3, 3), (3, 1);
+
+
+SET foreign_key_checks = 1;
