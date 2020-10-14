@@ -16,13 +16,13 @@ try {
     );
 
     // Définir la requête sql
-    $sql = "SELECT * FROM vue_livres";
+    $sql = "SELECT * FROM auteurs";
 
     // Exécuter la requête SQL
     $query = $pdo->query($sql);
 
     // Récupération des données de la requête sous la forme d'un tableau
-    $bookList = $query->fetchAll(PDO::FETCH_ASSOC);
+    $authorList = $query->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $ex) {
     echo $ex->getMessage();
 }
@@ -41,25 +41,17 @@ try {
 
 <body>
 
-    <h1 class="text-center mt-4 mb-2">Liste des livres</h1>
+    <h1 class="text-center mt-4 mb-2">Liste des auteurs</h1>
 
     <table class="table table-striped ml-2 mr-2">
         <tr>
-            <th>Titre</th>
-            <th>Année de publication</th>
-            <th>Prix</th>
-            <th>Genre</th>
-            <th>Editeur</th>
-            <th>Auteurs</th>
+            <th>Prénom</th>
+            <th>Nom</th>
         </tr>
-        <?php foreach ($bookList as $book) : ?>
+        <?php foreach ($authorList as $author) : ?>
             <tr>
-                <td><?= $book["titre"] ?></td>
-                <td><?= $book["annee_publication"] ?></td>
-                <td><?= $book["prix"] / 100 ?> €</td>
-                <td><?= $book["nom_genre"] ?></td>
-                <td><?= $book["nom_editeur"] ?></td>
-                <td><?= $book["auteurs"] ?></td>
+                <td><?= $author["prenom_auteur"] ?></td>
+                <td><?= $author["nom_auteur"] ?></td>
             </tr>
         <?php endforeach ?>
     </table>
