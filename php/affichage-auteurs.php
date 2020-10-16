@@ -54,9 +54,18 @@ try {
                 <td><?= $author["prenom_auteur"] ?></td>
                 <td><?= $author["nom_auteur"] ?></td>
                 <td>
-                    <a href="/modifier-auteur.php?id=<?= $author["id"] ?>" class="btn btn-primary">
-                        Modifier
-                    </a>
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item">
+                            <a href="/modifier-auteur.php?id=<?= $author["id"] ?>" class="btn btn-primary">
+                                Modifier
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="/modifier-auteur.php?id=<?= $author["id"] ?>" class="btn btn-danger">
+                                Suppression
+                            </a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         <?php endforeach ?>

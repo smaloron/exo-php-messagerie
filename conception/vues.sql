@@ -6,6 +6,6 @@ CONCAT_WS(' ', auteurs.prenom_auteur, auteurs.nom_auteur) SEPARATOR ','
 FROM livres 
 JOIN genres ON livres.id_genre = genres.id
 JOIN editeurs ON livres.id_editeur = editeurs.id
-JOIN livres_auteurs ON livres_auteurs.id_livre = livres.id
-JOIN auteurs ON livres_auteurs.id_auteur = auteurs.id
+LEFT JOIN livres_auteurs ON livres_auteurs.id_livre = livres.id
+LEFT JOIN auteurs ON livres_auteurs.id_auteur = auteurs.id
 GROUP BY livres.id;
