@@ -2,6 +2,7 @@
 
 // Déterminer si le formulaire a été posté
 
+
 // Si oui alors récupérer la saisie de l'utilisateur
 
 // Récupérer la connexion à la base de données

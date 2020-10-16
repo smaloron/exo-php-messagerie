@@ -62,13 +62,6 @@ try {
                 <td><?= $book["nom_editeur"] ?></td>
                 <td><?= $book["auteurs"] ?></td>
                 <td>
-                    <form method="post" action="suppression-livres.php">
-                        <button type="submit" class="btn btn-danger mb-3">
-                            supprimer (formulaire)
-                        </button>
-                        <input name="id" value="<?= $book["id"] ?>" type="hidden">
-                    </form>
-
                     <a href="/suppression-livres.php?id=<?= $book["id"] ?>" class="btn btn-danger">
                         Supprimer
                     </a>

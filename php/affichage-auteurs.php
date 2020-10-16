@@ -47,11 +47,17 @@ try {
         <tr>
             <th>Prénom</th>
             <th>Nom</th>
+            <th>Actions</th>
         </tr>
         <?php foreach ($authorList as $author) : ?>
             <tr>
                 <td><?= $author["prenom_auteur"] ?></td>
                 <td><?= $author["nom_auteur"] ?></td>
+                <td>
+                    <a href="/modifier-auteur.php?id=<?= $author["id"] ?>" class="btn btn-primary">
+                        Modifier
+                    </a>
+                </td>
             </tr>
         <?php endforeach ?>
     </table>
