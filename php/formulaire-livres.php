@@ -61,7 +61,8 @@ if ($isPosted) {
     $genre = filter_input(INPUT_POST, "genre", FILTER_SANITIZE_NUMBER_INT);
     $publisher = filter_input(INPUT_POST, "editeur", FILTER_SANITIZE_NUMBER_INT);
     // Récupération de la liste des auteurs sélectionnés
-    $authors = filter_input(INPUT_POST, "auteurs", FILTER_REQUIRE_ARRAY);
+    $authors = filter_input(INPUT_POST, "auteurs", FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+
 
     // L'utilisateur a entré des euros on enregistre des centimes dans la BD
     $price *= 100;
@@ -79,6 +80,14 @@ if ($isPosted) {
     $bookId = $pdo->lastInsertId();
 
     // Affectation des auteurs aux livres
+    $sql = "INSERT INTO livres_auteurs (id_livre, id_auteur) VALUES (?, ?)";
+    $statement = $pdo->prepare($sql);
+
+    $numberOfAuthors = count($authors);
+
+    for($i = 0; $i < $numberOfAuthors; $i ++){
+        $statement->execute([$bookId, $authors[$i]]);
+    }
 
     // Redirection
     header("location:/affichage-livres.php");
