@@ -60,6 +60,8 @@ if ($isPosted) {
     $price = filter_input(INPUT_POST, "prix", FILTER_SANITIZE_NUMBER_INT);
     $genre = filter_input(INPUT_POST, "genre", FILTER_SANITIZE_NUMBER_INT);
     $publisher = filter_input(INPUT_POST, "editeur", FILTER_SANITIZE_NUMBER_INT);
+    // Récupération de la liste des auteurs sélectionnés
+    $authors = filter_input(INPUT_POST, "auteurs", FILTER_REQUIRE_ARRAY);
 
     // L'utilisateur a entré des euros on enregistre des centimes dans la BD
     $price *= 100;
@@ -72,6 +74,11 @@ if ($isPosted) {
 
     // Exécution
     $statement->execute([$title, $publishedAt, $price, $genre, $publisher]);
+
+    // Récupération de l'id du livre
+    $bookId = $pdo->lastInsertId();
+
+    // Affectation des auteurs aux livres
 
     // Redirection
     header("location:/affichage-livres.php");
@@ -88,6 +95,21 @@ if ($isPosted) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des livres</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function(){
+            const $authorList = $("#authorList");
+            const $authorTemplate = $("#authorTemplate");
+            const $authorAddButton = $("#authorAddButton");
+
+            $authorAddButton.click(function(){
+                $newAuthor = $authorTemplate.clone().removeAttr("id");
+                $authorList.append($newAuthor);
+            });
+        });
+    </script>
 </head>
 
 <body class="container-fluid">
@@ -133,18 +155,18 @@ if ($isPosted) {
                     </select>
                 </div>
 
-                <fieldset>
+                <fieldset id="authorList">
                     <div class="row">
                         <legend class="col">Les auteurs</legend>
                         <div class="col-3">
-                            <button class="btn btn-primary btn-block">
+                            <button class="btn btn-primary btn-block" id="authorAddButton" type="button">
                                 Ajouter un auteur
                             </button>
                         </div>
                     </div>
 
 
-                    <div class="form-group">
+                    <div class="form-group" id="authorTemplate">
                         <select name="auteurs[]" class="form-control">
                             <?php foreach ($authorList as $author) : ?>
                                 <option value="<?= $author["id"] ?>">
