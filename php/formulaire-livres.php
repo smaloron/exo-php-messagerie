@@ -13,7 +13,6 @@ try {
     /*********************
      *  Récupération des genres
      *********************/
-
     // Requête sql
     $sql = "SELECT * FROM genres";
     // Exécution de la requête
@@ -30,39 +29,53 @@ try {
     $query = $pdo->query($sql);
     // Récupération des données de la requête
     $publisherList = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+    /*********************
+     *  Récupération des auteurs
+     *********************/
+    // Requête sql
+    $sql = "SELECT id, CONCAT_WS(' ', prenom_auteur, nom_auteur) as auteur FROM auteurs";
+    // Exécution de la requête
+    $query = $pdo->query($sql);
+    // Récupération des données de la requête
+    $authorList = $query->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $ex) {
     echo $ex->getMessage();
 }
+
+
+
 
 /**************************** 
  *  Traitement du formulaire
  ****************************/
 
- $isPosted = count($_POST);
+$isPosted = count($_POST);
 
- if($isPosted){
-     // Récupération des données
-     $title = filter_input(INPUT_POST, "titre", FILTER_SANITIZE_STRING);
-     $publishedAt = filter_input(INPUT_POST, "annee_publication", FILTER_SANITIZE_NUMBER_INT);
-     $price = filter_input(INPUT_POST, "prix", FILTER_SANITIZE_NUMBER_INT);
-     $genre = filter_input(INPUT_POST, "genre", FILTER_SANITIZE_NUMBER_INT);
-     $publisher = filter_input(INPUT_POST, "editeur", FILTER_SANITIZE_NUMBER_INT);
+if ($isPosted) {
+    // Récupération des données
+    $title = filter_input(INPUT_POST, "titre", FILTER_SANITIZE_STRING);
+    $publishedAt = filter_input(INPUT_POST, "annee_publication", FILTER_SANITIZE_NUMBER_INT);
+    $price = filter_input(INPUT_POST, "prix", FILTER_SANITIZE_NUMBER_INT);
+    $genre = filter_input(INPUT_POST, "genre", FILTER_SANITIZE_NUMBER_INT);
+    $publisher = filter_input(INPUT_POST, "editeur", FILTER_SANITIZE_NUMBER_INT);
 
-     // L'utilisateur a entré des euros on enregistre des centimes dans la BD
-     $price *= 100;
+    // L'utilisateur a entré des euros on enregistre des centimes dans la BD
+    $price *= 100;
 
-     // sql
-     $sql = "INSERT INTO livres (titre, annee_publication, prix, id_genre, id_editeur) VALUES (?,?,?,?,?)";
+    // sql
+    $sql = "INSERT INTO livres (titre, annee_publication, prix, id_genre, id_editeur) VALUES (?,?,?,?,?)";
 
-     // statement
-     $statement = $pdo->prepare($sql);
+    // statement
+    $statement = $pdo->prepare($sql);
 
-     // Exécution
-     $statement->execute([$title, $publishedAt, $price, $genre, $publisher]);
+    // Exécution
+    $statement->execute([$title, $publishedAt, $price, $genre, $publisher]);
 
-     // Redirection
-     header("location:/affichage-livres.php");
- }
+    // Redirection
+    header("location:/affichage-livres.php");
+}
 
 
 ?>
@@ -119,6 +132,28 @@ try {
                         <?php endforeach ?>
                     </select>
                 </div>
+
+                <fieldset>
+                    <div class="row">
+                        <legend class="col">Les auteurs</legend>
+                        <div class="col-3">
+                            <button class="btn btn-primary btn-block">
+                                Ajouter un auteur
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <select name="auteurs[]" class="form-control">
+                            <?php foreach ($authorList as $author) : ?>
+                                <option value="<?= $author["id"] ?>">
+                                    <?= $author["auteur"] ?>
+                                </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </fieldset>
 
                 <button type="submit" class="btn btn-primary btn-block">Valider</button>
             </form>
