@@ -85,7 +85,7 @@ if ($isPosted) {
 
     $numberOfAuthors = count($authors);
 
-    for($i = 0; $i < $numberOfAuthors; $i ++){
+    for ($i = 0; $i < $numberOfAuthors; $i++) {
         $statement->execute([$bookId, $authors[$i]]);
     }
 
@@ -108,14 +108,28 @@ if ($isPosted) {
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
             const $authorList = $("#authorList");
             const $authorTemplate = $("#authorTemplate");
             const $authorAddButton = $("#authorAddButton");
 
-            $authorAddButton.click(function(){
+            $authorAddButton.click(function() {
                 $newAuthor = $authorTemplate.clone().removeAttr("id");
                 $authorList.append($newAuthor);
+
+                console.log($authorList.children().length);
+            });
+
+            $("body").delegate('.author-delete', 'click', function() {
+
+                    if ($authorList.children().length <= 2){
+                        alert("Vous ne pouvez pas supprimer le dernier auteur");
+                        return;
+                    }
+
+                    if (confirm("êtes-vous sur(e) de vouloir supprimer cette liste ?")) {
+                        $(this).parent().parent().remove();
+                    }
             });
         });
     </script>
@@ -175,14 +189,21 @@ if ($isPosted) {
                     </div>
 
 
-                    <div class="form-group" id="authorTemplate">
-                        <select name="auteurs[]" class="form-control">
-                            <?php foreach ($authorList as $author) : ?>
-                                <option value="<?= $author["id"] ?>">
-                                    <?= $author["auteur"] ?>
-                                </option>
-                            <?php endforeach ?>
-                        </select>
+                    <div class="row" id="authorTemplate">
+                        <div class="form-group col-9">
+                            <select name="auteurs[]" class="form-control">
+                                <?php foreach ($authorList as $author) : ?>
+                                    <option value="<?= $author["id"] ?>">
+                                        <?= $author["auteur"] ?>
+                                    </option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-danger btn-block author-delete" type="button">
+                                Supprimer
+                            </button>
+                        </div>
                     </div>
                 </fieldset>
 
