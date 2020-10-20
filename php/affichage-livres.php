@@ -65,6 +65,9 @@ try {
                     <a href="/suppression-livres.php?id=<?= $book["id"] ?>" class="btn btn-danger">
                         Supprimer
                     </a>
+                    <a href="/modifier-livres.php?id=<?= $book["id"] ?>" class="btn btn-primary">
+                        Modifier
+                    </a>
                 </td>
             </tr>
         <?php endforeach ?>
