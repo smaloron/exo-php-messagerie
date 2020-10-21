@@ -7,12 +7,7 @@ $id = $_REQUEST["id"];
 if($id > 0){
     try {
         // Connexion à la base de données
-        $pdo = new PDO(
-            "mysql:host=127.0.0.1;dbname=formation;charset=utf8",
-            "root",
-            "",
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-        );
+        $pdo = require("connexion.php");
 
         // Définition de la requête SQL
         $sql = "DELETE FROM livres_auteurs WHERE id_livre = ?";

@@ -8,12 +8,7 @@
 
 // Obtenir une connexion à la base de données
 try {
-    $pdo = new PDO(
-        "mysql:host=127.0.0.1;dbname=formation;charset=utf8",
-        "root",
-        "",
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
+$pdo = require("connexion.php");
 
     // Définir la requête sql
     $sql = "SELECT * FROM vue_livres";

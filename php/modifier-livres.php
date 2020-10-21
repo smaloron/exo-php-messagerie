@@ -3,12 +3,7 @@
 try {
 
     // Connexion à la base de données
-    $pdo = new PDO(
-        "mysql:host=127.0.0.1;dbname=formation;charset=utf8",
-        "root",
-        "",
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
+$pdo = require("connexion.php");
 
     /*********************
      *  Récupération des données du livre
@@ -24,8 +19,17 @@ try {
 
     $bookData = $statement->fetch();
 
-var_dump($bookData);
+    /*********************
+     *  Récupération des identifiants des auteurs du livre
+     *********************/
 
+    $sql = "SELECT id_auteur FROM livres_auteurs WHERE id_livre= ?";
+
+    $statement = $pdo->prepare($sql);
+
+    $statement->execute([$id]);
+
+    $bookAuthors = $statement->fetchAll();
 
     /*********************
      *  Récupération des genres
@@ -85,16 +89,18 @@ if ($isPosted) {
     $price *= 100;
 
     // sql
-    $sql = "INSERT INTO livres (titre, annee_publication, prix, id_genre, id_editeur) VALUES (?,?,?,?,?)";
+    $sql = "UPDATE livres SET titre = ?, annee_publication= ?, prix = ?, id_genre = ?, id_editeur = ? WHERE id = ?";
 
     // statement
     $statement = $pdo->prepare($sql);
 
     // Exécution
-    $statement->execute([$title, $publishedAt, $price, $genre, $publisher]);
+    $statement->execute([$title, $publishedAt, $price, $genre, $publisher, $id]);
 
-    // Récupération de l'id du livre
-    $bookId = $pdo->lastInsertId();
+    // Remise à zéro des auteurs du livre
+    $sql = "DELETE FROM livres_auteurs WHERE id_livre = ?";
+    $statement = $pdo->prepare($sql);
+    $statement->execute([$id]);
 
     // Affectation des auteurs aux livres
     $sql = "INSERT INTO livres_auteurs (id_livre, id_auteur) VALUES (?, ?)";
@@ -103,7 +109,7 @@ if ($isPosted) {
     $numberOfAuthors = count($authors);
 
     for ($i = 0; $i < $numberOfAuthors; $i++) {
-        $statement->execute([$bookId, $authors[$i]]);
+        $statement->execute([$id, $authors[$i]]);
     }
 
     // Redirection
@@ -207,23 +213,25 @@ if ($isPosted) {
                         </div>
                     </div>
 
-
-                    <div class="row" id="authorTemplate">
-                        <div class="form-group col-9">
-                            <select name="auteurs[]" class="form-control">
-                                <?php foreach ($authorList as $author) : ?>
-                                    <option value="<?= $author["id"] ?>">
-                                        <?= $author["auteur"] ?>
-                                    </option>
-                                <?php endforeach ?>
-                            </select>
+                    <?php foreach($bookAuthors as $authorOfTheBook): ?>
+                        <div class="row" id="authorTemplate">
+                            <div class="form-group col-9">
+                                <select name="auteurs[]" class="form-control">
+                                    <?php foreach ($authorList as $author) : ?>
+                                        <option value="<?= $author["id"] ?>"
+                                         <?= $author["id"] == $authorOfTheBook["id_auteur"] ? "selected": "" ?>>
+                                            <?= $author["auteur"] ?>
+                                        </option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-danger btn-block author-delete" type="button">
+                                    Supprimer
+                                </button>
+                            </div>
                         </div>
-                        <div class="col-3">
-                            <button class="btn btn-danger btn-block author-delete" type="button">
-                                Supprimer
-                            </button>
-                        </div>
-                    </div>
+                    <?php endforeach ?>
                 </fieldset>
 
                 <button type="submit" class="btn btn-primary btn-block">Valider</button>

@@ -12,12 +12,7 @@
 // de sorte à ce que l'on puisse pré-remplir le formulaire
 // Obtenir une connexion à la base de données
 try {
-    $pdo = new PDO(
-        "mysql:host=127.0.0.1;dbname=formation;charset=utf8",
-        "root",
-        "",
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
+$pdo = require("connexion.php");
 
     // Récupération de l'id passé en paramètre
     $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
